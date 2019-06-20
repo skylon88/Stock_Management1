@@ -1,0 +1,2 @@
+1. When register DI for automappter, make sure AutoMapper.dll has been installed on two layers.
+2. DependencyOfDependencyExtension inject between Service and Data layers, DependencyInjector inject between Persentation and Service layers.
