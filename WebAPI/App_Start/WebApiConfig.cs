@@ -1,10 +1,11 @@
-﻿using NewServices;
-using NewServices.Interfaces;
-using NewServices.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Web.Http;
+using NewServices;
+using NewServices.Interfaces;
+using NewServices.Services;
 using Unity;
 using WebAPI.Controllers;
 
@@ -15,11 +16,17 @@ namespace WebAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            DependencyInjectorRegister.Init();
-            ManagementService managementService = DependencyInjector.Retrieve<ManagementService>();
-            var ctx = new DatabaseConfig(managementService);
-            DependencyInjector.Retrieve<RequestHeadersController>();
-            DependencyInjector.Retrieve<ValuesController>();
+            var container = new UnityContainer();
+            container.RegisterType<IRequestService, RequestService>();
+            container.RegisterType<IManagementService, ManagementService>();
+            container.RegisterType<IPurchaseService, PurchaseService>();
+            container.RegisterType<IStockService, StockService>();
+            container.AddNewExtension<DependencyOfDependencyExtension>();
+            ManagementService managementService = container.Resolve<ManagementService>();
+            new DatabaseConfig(managementService);
+            container.Resolve<RequestHeaderController>();
+
+            config.DependencyResolver = new UnityResolver(container);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -29,6 +36,8 @@ namespace WebAPI
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
         }
     }
 }
