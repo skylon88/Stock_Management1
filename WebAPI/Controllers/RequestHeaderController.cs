@@ -23,17 +23,17 @@ namespace WebAPI.Controllers
 
         // GET: api/requestHeader/{category}
         [ResponseType(typeof(RequestHeaderViewModel))]
-        public async Task<IHttpActionResult> Get(RequestCategoriesEnum category)
+        public async Task<IHttpActionResult> Get(int category)
         {
-            var data = _requestService.GetAllRequestHeaderByMonth(category);
+            var data = _requestService.GetAllRequestHeaderByMonth((RequestCategoriesEnum)category);
             return Ok(data);
         }
 
-        // GET: api/RequestHeader/5
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //// GET: api/RequestHeader/5
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
         // POST: api/RequestHeader
         public void Post([FromBody]string value)
