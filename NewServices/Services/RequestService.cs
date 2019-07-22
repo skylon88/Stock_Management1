@@ -295,8 +295,9 @@ namespace NewServices.Services
                             item.ToInStockTotal = item.ToInStockTotal > 0 ? item.ToInStockTotal : 0;
                             item.ToDestoryTotal = item.ToDestoryTotal > 0 ? item.ToDestoryTotal : 0;
                             item.AvailableInStorage = GetAvailableInStorage(item, requestViewModels, listOfOutStocks);
-                            item.ToApplyTotal = item.Total - item.AvailableInStorage > 0 ? item.Total - item.AvailableInStorage : 0;
-
+                            //item.ToApplyTotal = item.Total - item.AvailableInStorage > 0 ? item.Total - item.AvailableInStorage : 0;
+                            //因为购入需求时不需要计算可采购申请数量
+                            item.ToApplyTotal = item.Total;
                         }
                         numerator = model.RequestViewModels.Count(x => x.InStockTotal == x.Total);
                         denominator = model.RequestViewModels.Count();
