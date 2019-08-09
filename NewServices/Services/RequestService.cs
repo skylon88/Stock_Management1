@@ -738,7 +738,9 @@ namespace NewServices.Services
                 x.Status != ProcessStatusEnum.已出库 &&
                 x.Status != ProcessStatusEnum.报废出库 &&
                 x.Status != ProcessStatusEnum.补给出库 &&
-                x.Status != ProcessStatusEnum.退货出库).ToList();
+                x.Status != ProcessStatusEnum.退货出库 &&
+                //以下条件解决购入需求时避免item锁定
+                x.RequestCategory == RequestCategoriesEnum.购入需求 && x.Status != ProcessStatusEnum.采购入库).ToList();
             if (model.LockStatus == LockStatusEnum.已准备)
             {
                 allRestRequests = allRestRequests
