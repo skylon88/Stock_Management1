@@ -55,7 +55,7 @@ namespace NewServices.Services
 
         public ItemViewModel GetItemById(Guid id)
         {
-            var query = _itemRepository.FindBy(x=>x.ItemId == id).FirstOrDefault();
+            var query = _itemRepository.FindBy(x => x.ItemId == id).FirstOrDefault();
             var models = _mapper.Map<ItemViewModel>(query);
             return models;
         }
@@ -77,12 +77,13 @@ namespace NewServices.Services
         {
             Dictionary<string, byte[]> resourceDictionary = new Dictionary<string, byte[]>();
             var query = _itemRepository.GetAll().Include(x => x.Positions).OrderBy(x => x.SerialNumber).ToList();
-            ItemViewModel[] models = _mapper.Map<ItemViewModel[]>(query);          
-            using (ResourceReader reader = new ResourceReader(_resourceName)) {
+            ItemViewModel[] models = _mapper.Map<ItemViewModel[]>(query);
+            using (ResourceReader reader = new ResourceReader(_resourceName))
+            {
 
                 foreach (DictionaryEntry item in reader)
                 {
-                    resourceDictionary.Add(item.Key.ToString(), (byte[]) item.Value);
+                    resourceDictionary.Add(item.Key.ToString(), (byte[])item.Value);
                 }
 
                 foreach (var model in models)
@@ -161,7 +162,7 @@ namespace NewServices.Services
         public int CreateSupplier(string name)
         {
             if (name == null) return 0;
-            var isExisting = _supplierRepository.FindBy(x => x.Name == name).FirstOrDefault() !=null;
+            var isExisting = _supplierRepository.FindBy(x => x.Name == name).FirstOrDefault() != null;
             if (!isExisting)
             {
                 var newInstance = new Supplier()
@@ -219,22 +220,22 @@ namespace NewServices.Services
 
         public void InitalImagesToLocal(string resourceName, ExcelWorksheet worksheet)
         {
-                using (ResourceWriter rw = new ResourceWriter(resourceName))
+            using (ResourceWriter rw = new ResourceWriter(resourceName))
+            {
+                var end = worksheet.Dimension.End;
+                for (var row = 9; row < end.Row; row++)
                 {
-                    var end = worksheet.Dimension.End;
-                    for (var row = 9; row < end.Row; row++)
+                    var code = worksheet.Cells[row, 3].Value == null ? "" : worksheet.Cells[row, 3].Value.ToString();
+                    //Loading Picture
+                    if (worksheet.Drawings["image" + row] is ExcelPicture loadPicture)
                     {
-                        var code = worksheet.Cells[row, 3].Value == null ? "" : worksheet.Cells[row, 3].Value.ToString();
-                        //Loading Picture
-                        if (worksheet.Drawings["image" + row] is ExcelPicture loadPicture)
-                        {
-                            var uploadPicture = ImageToByteArray(loadPicture.Image);
-                            rw.AddResource(code, uploadPicture);
-                            
-                        }
+                        var uploadPicture = ImageToByteArray(loadPicture.Image);
+                        rw.AddResource(code, uploadPicture);
+
                     }
-                    rw.Generate();
                 }
+                rw.Generate();
+            }
 
         }
 
@@ -401,7 +402,7 @@ namespace NewServices.Services
                             break;
                     }
 
-                    
+
                 }
 
                 if (itemObject.SerialNumber > 0)
@@ -479,7 +480,7 @@ namespace NewServices.Services
                 }
                 _itemRepository.Save();
                 _positionRepository.Save();
-                
+
                 return 1;
             }
             catch (Exception)
@@ -525,8 +526,8 @@ namespace NewServices.Services
             for (var row = 3; row <= end.Row; row++)
             //for (var row = 3; row <= 40; row++)
             {
-                var positionObject = new Position {Id = Guid.NewGuid()};
-                
+                var positionObject = new Position { Id = Guid.NewGuid() };
+
                 for (var col = 1; col <= worksheet.Dimension.End.Column; col++)
                 {
                     var readValue = worksheet.Cells[row, col].Value == null ? "" : worksheet.Cells[row, col].Value.ToString();
@@ -581,7 +582,7 @@ namespace NewServices.Services
         {
             ExcelPackage package;
             IList<Supplier> listOfSupplier = new List<Supplier>();
-                      
+
             if (isInitial)
             {
                 byte[] excelFile = Resource.仓库物品资料汇总表;
@@ -600,7 +601,7 @@ namespace NewServices.Services
             var end = worksheet.Dimension.End;
             for (var row = 6; row < end.Row; row++)
             {
-                var supplierObj = new Supplier {Id = Guid.NewGuid()};
+                var supplierObj = new Supplier { Id = Guid.NewGuid() };
                 for (var col = 1; col <= worksheet.Dimension.End.Column; col++)
                 {
                     var readValue = worksheet.Cells[row, col].Value == null ? "" : worksheet.Cells[row, col].Value.ToString();
@@ -635,7 +636,7 @@ namespace NewServices.Services
         {
             var isExisting = _poRepository.FindBy(x => x.PoNumber == poNumber).FirstOrDefault();
 
-            if(isExisting != null)
+            if (isExisting != null)
             {
                 return isExisting.Id;
             }
@@ -654,7 +655,7 @@ namespace NewServices.Services
 
         public IList<string> GetPositionNameByCode(string code)
         {
-            IList<string> listOfPositionNames = code == null ? _positionRepository.GetAll().Select(y => y.PositionName).ToList() : _positionRepository.FindBy(x => x.Code == code).Select(y=>y.PositionName).ToList();
+            IList<string> listOfPositionNames = code == null ? _positionRepository.GetAll().Select(y => y.PositionName).ToList() : _positionRepository.FindBy(x => x.Code == code).Select(y => y.PositionName).ToList();
             return listOfPositionNames;
         }
 
@@ -663,7 +664,7 @@ namespace NewServices.Services
             var position = _positionRepository.FindBy(x => x.Code == code && x.PositionName == positionName).FirstOrDefault();
             if (position == null) return;
             position.Total = position.Total + total;
-            if(position.Total < 0)
+            if (position.Total < 0)
             {
                 position.Total = 0;
             }
@@ -685,7 +686,7 @@ namespace NewServices.Services
             if (afterModifiedPosition.Total > totalStock) return false;
             while (diffTotal > 0)
             {
-                if(stagePosition != null && stagePosition.Total > 0)
+                if (stagePosition != null && stagePosition.Total > 0)
                 {
                     var stagePositionTotalTemp = stagePosition.Total;
                     var diffTotalTemp = diffTotal;
@@ -694,7 +695,7 @@ namespace NewServices.Services
                 }
                 else
                 {
-                    foreach(var restPosition in restPositions)
+                    foreach (var restPosition in restPositions)
                     {
                         if (restPosition.Total <= 0) continue;
                         var restPositionTotalTemp = restPosition.Total;
@@ -704,11 +705,11 @@ namespace NewServices.Services
                     }
                 }
             }
-            if(diffTotal == 0)
+            if (diffTotal == 0)
             {
                 beforeModifiedPosition.Total = afterModifiedPosition.Total;
             }
-            else if(diffTotal < 0)
+            else if (diffTotal < 0)
             {
                 if (afterModifiedPosition.PositionName != "Stage")
                 {
@@ -739,7 +740,7 @@ namespace NewServices.Services
 
         public bool ExportItemExcel(string path, ReportNameEnum reportType, DateTime selectedMonth)
         {
-            var excelFile = Resource.采购申请表;
+            var excelFile = Resource.采购申请表; //包含多个tab
             using (ExcelPackage newpackage = new ExcelPackage())
             {
                 if (reportType == ReportNameEnum.物品盘点)
@@ -758,6 +759,7 @@ namespace NewServices.Services
                         using (ExcelPackage package = new ExcelPackage(templateStream))
                         {
                             var template = package.Workbook.Worksheets[ReportNameEnum.物品盘点.ToString()];
+                          
                             GenerateItemSummarySheet(template, false); //显示上限下限
                             newpackage.Workbook.Worksheets.Add("物品盘点(库存上下限)", template);
                         }
@@ -781,21 +783,21 @@ namespace NewServices.Services
             var count = 1;
             var row = 8;
             template.Name = "物品盘点";
+            Dictionary<string, byte[]> resourceDictionary = new Dictionary<string, byte[]>();
 
-            var listOfItems = _itemRepository.GetAll().Include(x=>x.Positions).ToList();
+            var listOfItems = _itemRepository.GetAll().Include(x => x.Positions).Take(10).ToList();
             //Header 
             template.Cells["E3"].Value = DateTime.Now.ToString("yyyy-MM-dd"); //出单日期               
-            //template.Cells["D3"].Value = outstockHeaderViewModel.ApplicationDept; //制表科室
-            //template.Cells["F3"].Value = outstockHeaderViewModel.CreatePerson; //制表人
-            //template.Cells["H3"].Value = outstockHeaderViewModel.AuditDepart; //审核部门
-            //template.Cells["J3"].Value = outstockHeaderViewModel.AuditDepart; //审核人
-            //template.Cells["D4"].Value = outstockHeaderViewModel.AuditDepart; //领料人
-            //template.Cells["B4"].Value = outstockHeaderViewModel.OutStockNumber; //出库单号
-            //template.Cells["F4"].Value = outstockHeaderViewModel.CreatePerson; //领料小组
-            //template.Cells["H4"].Value = requestHeader.Contract.Address; //出货地址
-            //template.Cells["J4"].Value = requestHeader.Contract.ContractId; //合同编号
-            //template.Cells["B5"].Value = requestHeader.RequestCategory.ToString(); //出库类型
-                                                                                   //Body
+
+            using (ResourceReader reader = new ResourceReader(_resourceName))
+            {
+
+                foreach (DictionaryEntry item in reader)
+                {
+                    resourceDictionary.Add(item.Key.ToString(), (byte[])item.Value);
+                }
+            }
+
             foreach (var m in listOfItems)
             {
                 if (tab)
@@ -813,6 +815,7 @@ namespace NewServices.Services
                         var chinese = "I" + row;
                         var english = "J" + row;
                         var brand = "L" + row;
+                        var imgae = "K" + row; //图片
                         var model = "M" + row;
                         var specification = "N" + row;
                         var dimension = "O" + row;
@@ -841,6 +844,7 @@ namespace NewServices.Services
                         //template.Cells[Diffy].Value = string.Format("{0:C}", model.Price);
                         template.Cells[inTotal].Value = p.Total;
                         template.Cells[note].Value = m.Comments;
+                    
 
                         template.Row(row).Height = 20;
                         template.Cells[serialNo + ":" + note].Style.Font.Size = 10;
@@ -865,6 +869,7 @@ namespace NewServices.Services
                     var code = "H" + row;
                     var chinese = "I" + row;
                     var english = "J" + row;
+                    var imgae = "K" + row; //图片
                     var brand = "L" + row;
                     var model = "M" + row;
                     var specification = "N" + row;
@@ -892,7 +897,19 @@ namespace NewServices.Services
                     template.Cells[unit].Value = m.Unit;
                     template.Cells[note].Value = m.Comments;
 
-                    template.Row(row).Height = 20;
+                    //if (resourceDictionary.ContainsKey(m.Code))
+                    //{
+                    //    //var ms = new MemoryStream(resourceDictionary[m.Code]);
+                    //    //var i = Image.FromStream(ms);          
+                    //var image1 = System.Drawing.Image.FromFile(@"C:\Users\csun\Pictures\1088542.png", true);
+                    //var picture = template.Drawings.AddPicture(m.Code, image1);
+                    //picture.SetSize(30, 30);
+                    //picture.SetPosition(row - 1, 10, 10, 10);
+                    //    }
+
+                    //}
+
+                    template.Row(row).Height = 80;
                     template.Cells[serialNo + ":" + note].Style.Font.Size = 10;
                     template.Cells[serialNo + ":" + note].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     template.Cells[serialNo + ":" + note].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
@@ -920,7 +937,7 @@ namespace NewServices.Services
             ExcelWorksheet worksheet = workbook.Worksheets[1];
             if (worksheet == null) return 0;
             var end = worksheet.Dimension.End;
-            var code= string.Empty;
+            var code = string.Empty;
             var positionName = string.Empty;
             double totalInPut = 0;
             var comment = string.Empty;
@@ -965,7 +982,7 @@ namespace NewServices.Services
             {
                 return 0;
             }
-            
+
         }
 
     }
