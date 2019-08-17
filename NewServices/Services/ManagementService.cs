@@ -78,21 +78,28 @@ namespace NewServices.Services
             Dictionary<string, byte[]> resourceDictionary = new Dictionary<string, byte[]>();
             var query = _itemRepository.GetAll().Include(x => x.Positions).OrderBy(x => x.SerialNumber).ToList();
             ItemViewModel[] models = _mapper.Map<ItemViewModel[]>(query);
-            using (ResourceReader reader = new ResourceReader(_resourceName))
+            try
             {
-
-                foreach (DictionaryEntry item in reader)
+                using (ResourceReader reader = new ResourceReader(_resourceName))
                 {
-                    resourceDictionary.Add(item.Key.ToString(), (byte[])item.Value);
-                }
 
-                foreach (var model in models)
-                {
-                    if (resourceDictionary.ContainsKey(model.Code))
+                    foreach (DictionaryEntry item in reader)
                     {
-                        model.Picture = resourceDictionary[model.Code];
+                        resourceDictionary.Add(item.Key.ToString(), (byte[])item.Value);
+                    }
+
+                    foreach (var model in models)
+                    {
+                        if (resourceDictionary.ContainsKey(model.Code))
+                        {
+                            model.Picture = resourceDictionary[model.Code];
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                
             }
             return models;
         }
@@ -749,9 +756,11 @@ namespace NewServices.Services
                     {
                         using (ExcelPackage package = new ExcelPackage(templateStream))
                         {
-                            var template = package.Workbook.Worksheets[ReportNameEnum.物品盘点.ToString()];
+                            var template = package.Workbook.Worksheets[ReportNameEnum.物品盘点.ToString()];                         
                             GenerateItemSummarySheet(template, true); //显示Position
                             newpackage.Workbook.Worksheets.Add("物品盘点(库位)", template);
+                            var templateWithImage = newpackage.Workbook.Worksheets["物品盘点(库位)"];
+                            InsertImageToItemSummarySheet(templateWithImage, true);
                         }
                     }
                     using (var templateStream = new MemoryStream(excelFile))
@@ -759,21 +768,81 @@ namespace NewServices.Services
                         using (ExcelPackage package = new ExcelPackage(templateStream))
                         {
                             var template = package.Workbook.Worksheets[ReportNameEnum.物品盘点.ToString()];
-                          
-                            GenerateItemSummarySheet(template, false); //显示上限下限
+                            GenerateItemSummarySheet(template, false); //显示上限下限                      
                             newpackage.Workbook.Worksheets.Add("物品盘点(库存上下限)", template);
+                            var templateWithImage = newpackage.Workbook.Worksheets["物品盘点(库存上下限)"];
+                            InsertImageToItemSummarySheet(templateWithImage, false);
                         }
                     }
                 }
+
                 try
                 {
                     FileInfo file = new FileInfo(path);
                     newpackage.SaveAs(file);
                     return true;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    var msg = e.Message;
                     return false;
+                }
+            }
+        }
+
+        private void InsertImageToItemSummarySheet(ExcelWorksheet template, bool tab)
+        {
+            var row = 8;
+
+            Dictionary<string, byte[]> resourceDictionary = new Dictionary<string, byte[]>();
+            var listOfItems = _itemRepository.GetAll().Include(x => x.Positions).ToList();
+
+            try
+            {
+                using (ResourceReader reader = new ResourceReader(_resourceName))
+                {
+
+                    foreach (DictionaryEntry item in reader)
+                    {
+                        resourceDictionary.Add(item.Key.ToString(), (byte[])item.Value);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            
+            foreach (var m in listOfItems)
+            {
+                if (tab)
+                {
+                    foreach (var p in m.Positions)
+                    {
+                        if (resourceDictionary.ContainsKey(m.Code))
+                        {
+                            var ms = new MemoryStream(resourceDictionary[m.Code]);
+                            var image = Image.FromStream(ms);
+                            var picture = template.Drawings.AddPicture(Guid.NewGuid().ToString(), image);
+                            picture.SetSize(60, 60);
+                            picture.SetPosition(row - 1, 20, 10, 30);
+                            break;
+                        }
+                        
+                    }
+                    row = row + m.Positions.Count;
+                }
+                else
+                {
+                    if (resourceDictionary.ContainsKey(m.Code))
+                    {
+                        var ms = new MemoryStream(resourceDictionary[m.Code]);
+                        var image = Image.FromStream(ms);
+                        var picture = template.Drawings.AddPicture(Guid.NewGuid().ToString(), image);
+                        picture.SetSize(50, 50);
+                        picture.SetPosition(row - 1, 50, 10, 40);
+                    }
+                    row++;
                 }
             }
         }
@@ -783,21 +852,9 @@ namespace NewServices.Services
             var count = 1;
             var row = 8;
             template.Name = "物品盘点";
-            Dictionary<string, byte[]> resourceDictionary = new Dictionary<string, byte[]>();
 
-            var listOfItems = _itemRepository.GetAll().Include(x => x.Positions).Take(10).ToList();
-            //Header 
-            template.Cells["E3"].Value = DateTime.Now.ToString("yyyy-MM-dd"); //出单日期               
-
-            using (ResourceReader reader = new ResourceReader(_resourceName))
-            {
-
-                foreach (DictionaryEntry item in reader)
-                {
-                    resourceDictionary.Add(item.Key.ToString(), (byte[])item.Value);
-                }
-            }
-
+            var listOfItems = _itemRepository.GetAll().Include(x => x.Positions).ToList();
+            //Header           
             foreach (var m in listOfItems)
             {
                 if (tab)
@@ -846,7 +903,7 @@ namespace NewServices.Services
                         template.Cells[note].Value = m.Comments;
                     
 
-                        template.Row(row).Height = 20;
+                        template.Row(row).Height = 80;
                         template.Cells[serialNo + ":" + note].Style.Font.Size = 10;
                         template.Cells[serialNo + ":" + note].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         template.Cells[serialNo + ":" + note].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
@@ -897,18 +954,6 @@ namespace NewServices.Services
                     template.Cells[unit].Value = m.Unit;
                     template.Cells[note].Value = m.Comments;
 
-                    //if (resourceDictionary.ContainsKey(m.Code))
-                    //{
-                    //    //var ms = new MemoryStream(resourceDictionary[m.Code]);
-                    //    //var i = Image.FromStream(ms);          
-                    //var image1 = System.Drawing.Image.FromFile(@"C:\Users\csun\Pictures\1088542.png", true);
-                    //var picture = template.Drawings.AddPicture(m.Code, image1);
-                    //picture.SetSize(30, 30);
-                    //picture.SetPosition(row - 1, 10, 10, 10);
-                    //    }
-
-                    //}
-
                     template.Row(row).Height = 80;
                     template.Cells[serialNo + ":" + note].Style.Font.Size = 10;
                     template.Cells[serialNo + ":" + note].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -922,7 +967,7 @@ namespace NewServices.Services
                     count++;
                 }
 
-            }
+            }        
         }
 
         //上传盘点表

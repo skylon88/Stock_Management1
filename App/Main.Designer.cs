@@ -944,7 +944,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Main";
             this.Ribbon = this.ribbonControl;
-            this.Text = "物管程序 - COMPONENT ELEMENT CONTRACTING LTD (Version - 1.4.6)";
+            this.Text = "物管程序 - COMPONENT ELEMENT CONTRACTING LTD (Version - 1.5.0)";
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).EndInit();
