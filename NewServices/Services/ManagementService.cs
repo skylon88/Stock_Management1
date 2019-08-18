@@ -770,8 +770,8 @@ namespace NewServices.Services
                             var template = package.Workbook.Worksheets[ReportNameEnum.物品盘点.ToString()];
                             GenerateItemSummarySheet(template, false); //显示上限下限                      
                             newpackage.Workbook.Worksheets.Add("物品盘点(库存上下限)", template);
-                            var templateWithImage = newpackage.Workbook.Worksheets["物品盘点(库存上下限)"];
-                            InsertImageToItemSummarySheet(templateWithImage, false);
+                            //var templateWithImage = newpackage.Workbook.Worksheets["物品盘点(库存上下限)"];
+                            //InsertImageToItemSummarySheet(templateWithImage, false);
                         }
                     }
                 }
@@ -819,18 +819,17 @@ namespace NewServices.Services
                 {
                     foreach (var p in m.Positions)
                     {
-                        if (resourceDictionary.ContainsKey(m.Code))
+                        if (resourceDictionary.ContainsKey(m.Code) && p.PositionName != "Stage")
                         {
                             var ms = new MemoryStream(resourceDictionary[m.Code]);
                             var image = Image.FromStream(ms);
                             var picture = template.Drawings.AddPicture(Guid.NewGuid().ToString(), image);
                             picture.SetSize(60, 60);
                             picture.SetPosition(row - 1, 20, 10, 30);
-                            break;
                         }
-                        
+                        row++;
                     }
-                    row = row + m.Positions.Count;
+                    //row = row + m.Positions.Count;
                 }
                 else
                 {
