@@ -681,16 +681,25 @@ namespace NewServices.Services
             _positionRepository.Save();
         }
 
-        public bool TransferStorage(PositionViewModel afterModifiedPosition)
+        public bool TransferStorage(PositionViewModel afterModifiedPosition, out IList<PositionViewModel> positionViewModels)
         {
-            var allPositions = _positionRepository.FindBy(x => x.ItemId == afterModifiedPosition.ItemId);
+            var allPositions = _positionRepository.FindBy(x => x.ItemId == afterModifiedPosition.ItemId).ToList();
             var beforeModifiedPosition = allPositions.FirstOrDefault(x => x.Id == afterModifiedPosition.Id);
             var stagePosition = allPositions.FirstOrDefault(x => x.PositionName == "Stage");
             var restPositions = allPositions.Where(x => x.Id != afterModifiedPosition.Id && x.PositionName != "Stage").ToList();
             var totalStock = allPositions.Sum(x => x.Total);
-            if (beforeModifiedPosition == null) return false;
+            
+            if (beforeModifiedPosition == null)
+            {
+                positionViewModels = _mapper.Map<PositionViewModel[]>(allPositions);
+                return false;
+            }
             var diffTotal = afterModifiedPosition.Total - beforeModifiedPosition.Total;
-            if (afterModifiedPosition.Total > totalStock) return false;
+            if (afterModifiedPosition.Total > totalStock)
+            {
+                positionViewModels = _mapper.Map<PositionViewModel[]>(allPositions);
+                return false;
+            }
             while (diffTotal > 0)
             {
                 if (stagePosition != null && stagePosition.Total > 0)
@@ -729,6 +738,7 @@ namespace NewServices.Services
             _positionRepository.Edit(stagePosition);
             _positionRepository.EditRange(restPositions);
             _positionRepository.Save();
+            positionViewModels = _mapper.Map<PositionViewModel[]>(allPositions);
             return true;
         }
 

@@ -360,7 +360,8 @@ namespace App.Views.需求部分
         {
             var positionView = sender as GridView;
             PositionViewModel row = positionView.GetFocusedRow() as PositionViewModel;
-            bool result = _managementService.TransferStorage(row);
+            IList<PositionViewModel> positionViewModels = null;
+            bool result = _managementService.TransferStorage(row, out positionViewModels);
 
             if (!result)
             {

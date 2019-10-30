@@ -15,6 +15,7 @@ using Core.Enum;
 using NewServices.Interfaces;
 using NewServices.Models.管理;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace App.Views.管理
 {
@@ -183,16 +184,18 @@ namespace App.Views.管理
             {
                 var row = detailView.GetFocusedRow() as PositionViewModel;
                 SplashScreenManager.ShowDefaultWaitForm();
-                var result = _managementService.TransferStorage(row);
+                IList<PositionViewModel> positionViewModels = null;
+                var result = _managementService.TransferStorage(row, out positionViewModels);
             
                 if (!result)
                 {
                     MessageBox.Show("请输出正确的库存数量");
                     return;
                 }
+                RefreshOneItem(row.ItemId, positionViewModels);
             }
 
-            RefreshData(true);
+           
             SplashScreenManager.CloseDefaultWaitForm();
         }
 
@@ -266,6 +269,15 @@ namespace App.Views.管理
             this.gridControl1.DataSource = _managementService.GetAllItems();
             this._supplierRepItem.DataSource = _managementService.GetAllSuppliers().Select(x => x.Name);
             if (isSaveState) _refreshHelper.LoadViewInfo();
+        }
+
+        public void RefreshOneItem(Guid itemId, IList<PositionViewModel> positionViewModels)
+        {
+            _refreshHelper.SaveViewInfo();
+            var toUpdateDataSource = (IList<ItemViewModel>)this.gridControl1.DataSource;
+            var selectedItem = toUpdateDataSource.Where(x => x.ItemId == itemId).FirstOrDefault().PositionViewModels = new BindingList<PositionViewModel>(positionViewModels);
+            this.gridControl1.RefreshDataSource();
+            _refreshHelper.LoadViewInfo();
         }
 
     }

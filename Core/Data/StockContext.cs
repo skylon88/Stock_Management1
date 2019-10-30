@@ -7,10 +7,10 @@ namespace Core.Data
   
     public class StockContext : DbContext
     {
-
+        //"stock_management_2019-08-25T02-00Z"
         //"Stock_Management"
         //"Data Source=componentelement-db.database.windows.net;Initial Catalog=stock_management;User ID=reportAdmin;Password=@W19880413;Integrated Security=False;Connect Timeout=600";
-        public StockContext() : base("Data Source=componentelement-db.database.windows.net;Initial Catalog=stock_management;User ID=reportAdmin;Password=@W19880413;Integrated Security=False;Connect Timeout=600")
+        public StockContext() : base("Data Source=componentelement-db.database.windows.net;Initial Catalog=stock_management_2019-08-25T02-00Z;User ID=reportAdmin;Password=@W19880413;Integrated Security=False;Connect Timeout=600")
         {
             Database.CommandTimeout = 900;
             Database.SetInitializer(new CreateDatabaseIfNotExists<StockContext>());

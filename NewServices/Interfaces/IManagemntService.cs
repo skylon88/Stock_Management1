@@ -36,7 +36,7 @@ namespace NewServices.Interfaces
         int CreateSupplier(string name);
 
         void UpdateStorage(string code, string position, double total, string inStockNumber);
-        bool TransferStorage(PositionViewModel model);
+        bool TransferStorage(PositionViewModel model, out IList<PositionViewModel> positionViewModels);
         void UpdateItemPrice(Guid itemId, double price);
         bool ExportItemExcel(string path, ReportNameEnum reportType, DateTime selectedMonth);
 
