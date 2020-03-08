@@ -7,7 +7,7 @@ namespace NewServices.Interfaces
 {
     public interface IRequestService
     {
-        IList<RequestHeaderViewModel> GetAllRequestHeaderByMonth(RequestCategoriesEnum requestCategoryId, DateTime? month = null);
+        IList<RequestHeaderViewModel> GetAllRequestHeaderByCategory(RequestCategoriesEnum requestCategoryId, DateTime? month = null);
 
         int UpdateRequest(RequestViewModel model);
 

@@ -25,7 +25,9 @@ namespace NewServices.Services
         private readonly IRequestHeaderRepository _requestHeaderRepository;
         private readonly IPurchaseService _purchaseService;
         private readonly IRequestService _requestService;
+        private readonly IRequestRepository _requestRepository;
         private readonly IPurchaseHeaderRepository _purchaseHeaderRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
         private readonly IInStockHeaderRepository _inStockHeaderRepository;
         private readonly IInStockRepository _inStockRepository;
         private readonly IOutStockHeaderRepository _outStockHeaderRepository;
@@ -36,6 +38,8 @@ namespace NewServices.Services
                             IRequestHeaderRepository requestHeaderRepository,
                             IPurchaseService purchaseService,
                             IRequestService requestService,
+                            IRequestRepository requestRepository,
+                            IPurchaseRepository purchaseRepository,
                             IPurchaseHeaderRepository purchaseHeaderRepository,
                             IInStockHeaderRepository inStockHeaderRepository,
                             IInStockRepository inStockRepository,
@@ -47,6 +51,8 @@ namespace NewServices.Services
             _requestHeaderRepository = requestHeaderRepository;
             _purchaseService = purchaseService;
             _requestService = requestService;
+            _requestRepository = requestRepository;
+            _purchaseRepository = purchaseRepository;
             _purchaseHeaderRepository = purchaseHeaderRepository;
             _inStockHeaderRepository = inStockHeaderRepository;
             _inStockRepository = inStockRepository;
@@ -280,10 +286,14 @@ namespace NewServices.Services
         public IList<InStockHeaderViewModel> GetAllInStockHeaderViewModel()
         {
             var listOfInStockHeader = _inStockHeaderRepository.GetAllInStockHeaders();
+            var requestHeaders = _requestHeaderRepository.GetAll().ToList();
+            var purchaseHeaders = _purchaseHeaderRepository.GetAll().ToList();
+            var requests = _requestRepository.GetAll().ToList();
+            var purchases = _purchaseRepository.GetAll().ToList();
             IList<InStockHeaderViewModel> listOfInStockHeaderViewModels = _mapper.Map<InStockHeaderViewModel[]>(listOfInStockHeader);
             foreach (var inStockHeader in listOfInStockHeaderViewModels)
             {
-                var requestHeader = _requestHeaderRepository.GetRequestHeader(inStockHeader.RequestNumber);
+                var requestHeader = requestHeaders.Where(x=> x.RequestHeaderNumber == inStockHeader.RequestNumber).FirstOrDefault();
 
                 switch (inStockHeader.InStockCategory)
                 {
@@ -295,7 +305,7 @@ namespace NewServices.Services
                             inStockHeader.ContractNumber = requestHeader?.Contract?.ContractNumber;
                             foreach (var inStock in inStockHeader.InStockViewModels)
                             {
-                                var request = requestHeader.Requests.FirstOrDefault(x => x.RequestId == inStock.RequestId);
+                                var request = requests.FirstOrDefault(x => x.RequestId == inStock.RequestId);
                                 if (request != null) inStock.Price = request.Item.Price;
                                 inStock.TotalPrice = inStock.Price * inStock.Total;
 
@@ -319,13 +329,13 @@ namespace NewServices.Services
 
                     default:
                         {
-                            var purchaseHeader = _purchaseHeaderRepository.GetPurchaseHeader(inStockHeader.PurchaseNumber);
+                            var purchaseHeader = purchaseHeaders.Where(x => x.PurchaseNumber == inStockHeader.PurchaseNumber).FirstOrDefault();
                             inStockHeader.PoNumber = requestHeader?.Contract?.PoModel?.PoNumber;
                             inStockHeader.SupplierName = purchaseHeader?.SupplierId;
                             foreach (var instock in inStockHeader.InStockViewModels)
                             {
                                 if (!instock.PurchaseId.HasValue) continue;
-                                var purchase = purchaseHeader.Purchases.FirstOrDefault(x => x.PurchaseId == instock.PurchaseId);
+                                var purchase = purchases.FirstOrDefault(x => x.PurchaseId == instock.PurchaseId);
                                 if (purchase == null) continue;
                                 instock.Price = purchase.CurrentPurchasePrice;
                                 instock.TotalPrice = instock.Price * instock.Total;
@@ -340,6 +350,8 @@ namespace NewServices.Services
 
         public IList<OutStockHeaderViewModel> GetAllOutStockHeaderViewModel()
         {
+            var requestHeaders = _requestHeaderRepository.GetAll().ToList();
+            var requests = _requestRepository.GetAll().ToList();
             var listOfOutstockHeader = _outStockHeaderRepository.GetAllOutStockHeaders();
             IList<OutStockHeaderViewModel> listOfOutstockHeaderViewModels = _mapper.Map<OutStockHeaderViewModel[]>(listOfOutstockHeader);
             foreach (var outStockHeader in listOfOutstockHeaderViewModels)
@@ -347,12 +359,10 @@ namespace NewServices.Services
                 if (outStockHeader.OutStockCategory == RequestCategoriesEnum.工具维修 ||
                    outStockHeader.OutStockCategory == RequestCategoriesEnum.工程车维修)
                 {
-                    var requestHeader = _requestHeaderRepository.GetRequestHeader(outStockHeader.RequestNumber);
-                    //outStockHeader.ContractNumber = requestHeader?.Contract?.ContractNumber;
-                    //outStockHeader.Address = requestHeader?.Contract?.Address;
+                    var requestHeader = requestHeaders.FirstOrDefault(x => x.RequestHeaderNumber == outStockHeader.RequestNumber);
                     foreach (var outStock in outStockHeader.OutStockViewModels)
                     {
-                        var request = requestHeader.Requests.FirstOrDefault(x => x.RequestId == outStock.RequestId);
+                        var request = requests.FirstOrDefault(x => x.RequestId == outStock.RequestId);
                         if (request?.FixModel != null)
                         {
                             outStock.TotalPrice = request.FixModel.Price;

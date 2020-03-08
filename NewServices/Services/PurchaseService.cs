@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.IO;
@@ -449,9 +450,10 @@ namespace NewServices.Services
         public IList<PurchaseHeaderViewModel> GetAllPurchaseViewModels(RequestCategoriesEnum category)
         {
             var listOfPurchases = _purchaseHeaderRepository.GetPurchaseHeaders(category).ToList();
-            var listOfStocks = _inStockRepository.GetAll();
+            var listOfStocks = _inStockRepository.GetAll().ToList();
             var listRequesterHeaders = _requestHeaderRepository.GetAll().Include(x => x.Contract);
             var models = _mapper.Map<PurchaseHeaderViewModel[]>(listOfPurchases);
+            var listOfPurchasedViewModels = new List<PurchaseViewModel>();
             foreach (var item in models)
             {
                 int numerator = 0;
@@ -482,13 +484,23 @@ namespace NewServices.Services
                 }
                 item.TotalPrice = item.PurchaseViewModels.Sum(x => x.TotalPrice);
                 item.CompletePercentage = (decimal)numerator / denominator;
-                item.PurchaseViewModels.ToList()
-                    .ForEach(x => x.AlreadyInStock = listOfStocks.Where(l => l.PurchaseId == x.PurchaseId).ToArray().Any() ?
-                    listOfStocks.Where(l => l.PurchaseId == x.PurchaseId).Sum(z => z.Total) :
-                    0);
-
+                listOfPurchasedViewModels.AddRange(item.PurchaseViewModels);
+                //item.PurchaseViewModels.ToList()
+                //    .ForEach(x => x.AlreadyInStock = listOfStocks.Where(l => l.PurchaseId == x.PurchaseId).ToArray().Any() ?
+                //    listOfStocks.Where(l => l.PurchaseId == x.PurchaseId).Sum(z => z.Total) :
+                //    0);
             }
-            return models;
+            foreach(var item in listOfPurchasedViewModels)
+            {
+                item.AlreadyInStock = listOfStocks.Where(l => l.PurchaseId == item.PurchaseId).ToArray().Any() ?
+                   listOfStocks.Where(l => l.PurchaseId == item.PurchaseId).Sum(z => z.Total) :
+                   0;
+            }
+            foreach (var item in models)
+            {
+                item.PurchaseViewModels = new BindingList<PurchaseViewModel>(listOfPurchasedViewModels.Where(x => x.PurchaseNumber == item.PurchaseNumber).ToList());
+            }
+                return models;
         }
 
         //按最大采购数量填充到货数量

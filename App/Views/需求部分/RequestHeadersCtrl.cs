@@ -872,7 +872,7 @@ namespace App.Views.需求部分
         public void RefreshData(bool isSaveState = false)
         {
             if (isSaveState) _refreshHelper.SaveViewInfo();
-            this.gridControl1.DataSource = _requestService.GetAllRequestHeaderByMonth(_currentRequestCategory, null);
+            this.gridControl1.DataSource = _requestService.GetAllRequestHeaderByCategory(_currentRequestCategory, null);
             if (isSaveState) _refreshHelper.LoadViewInfo();
             SetupButtonStatus();
         }

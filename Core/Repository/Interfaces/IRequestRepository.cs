@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Data;
+using Core.Enum;
 using Core.Model;
 
 namespace Core.Repository.Interfaces
 {
     public interface IRequestHeaderRepository : IGenericRepository<RequestHeader>
     {
-        IList<RequestHeader> GetAllByMonth(DateTime? month);
+        IList<RequestHeader> GetRequestHeadersByCategory(RequestCategoriesEnum requestCategory);
 
         RequestHeader GetRequestHeader(string requestNumber);
 

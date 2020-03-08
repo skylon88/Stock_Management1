@@ -5,6 +5,7 @@ using Core.Data;
 using Core.Model;
 using System.Data.Entity;
 using Core.Repository.Interfaces;
+using Core.Enum;
 
 namespace Core.Repository
 {
@@ -16,9 +17,9 @@ namespace Core.Repository
 
         }
 
-        public IList<RequestHeader> GetAllByMonth(DateTime? month)
+        public IList<RequestHeader> GetRequestHeadersByCategory(RequestCategoriesEnum requestCategory)
         {
-            var result = GetAll().Include(c=>c.Contract).Include(x => x.Requests.Select(i => i.Item.Positions)).ToArray();
+            var result = FindBy(x=>x.RequestCategory == requestCategory).Include(c=>c.Contract).Include(x => x.Requests.Select(i => i.Item.Positions)).ToArray();
             return result;
         }
 

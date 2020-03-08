@@ -238,15 +238,21 @@ namespace NewServices.Services
             }
         }
 
-        public IList<RequestHeaderViewModel> GetAllRequestHeaderByMonth(RequestCategoriesEnum requestCategory, DateTime? month)
+        public IList<RequestHeaderViewModel> GetAllRequestHeaderByCategory(RequestCategoriesEnum requestCategory, DateTime? month)
         {
             if (month == null) month = DateTime.Now;
-            var result = _requestHeaderRepository.GetAllByMonth(month).Where(x=>x.RequestCategory == requestCategory);
+            var result = _requestHeaderRepository.GetRequestHeadersByCategory(requestCategory);
 
             //TO DO mapping 
             var requestHeaderViewModels = _mapper.Map<RequestHeaderViewModel[]>(result);
-            var requests = _requestRepository.GetAll().ToList();
-            var requestViewModels = _mapper.Map<RequestViewModel[]>(requests);
+            //var requests = _requestRepository.GetAll().ToList();
+            //var requestViewModels = _mapper.Map<RequestViewModel[]>(requests);
+            var listOfRequestViewModels = new List<RequestViewModel>();
+            foreach (var item in requestHeaderViewModels)
+            {
+                listOfRequestViewModels.AddRange(item.RequestViewModels);
+            }
+            var requestViewModels = listOfRequestViewModels.ToArray();
             var listOfOutStocks = _outStockRepository.FindBy(x => x.Type == requestCategory).ToArray();
             var listOfInStocks = _inStockRepository.FindBy(x => x.Type == requestCategory).ToArray();
             

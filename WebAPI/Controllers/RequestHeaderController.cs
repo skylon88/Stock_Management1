@@ -25,7 +25,7 @@ namespace WebAPI.Controllers
         [ResponseType(typeof(RequestHeaderViewModel))]
         public async Task<IHttpActionResult> Get(int category)
         {
-            var data = _requestService.GetAllRequestHeaderByMonth((RequestCategoriesEnum)category);
+            var data = _requestService.GetAllRequestHeaderByCategory((RequestCategoriesEnum)category);
             return Ok(data);
         }
 
