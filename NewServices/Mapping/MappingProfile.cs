@@ -183,27 +183,29 @@ namespace NewServices.Mapping
                 .ForMember(x => x.Specification, opt => opt.MapFrom(s => s.Item.Specification))
                 .ForMember(x => x.Dimension, opt => opt.MapFrom(s => s.Item.Dimension))
                 .ForMember(x => x.Unit, opt => opt.MapFrom(s => s.Item.Unit));
-                //.ForMember(x => x.Price, opt => opt.MapFrom(s => s.Purchase.CurrentPurchasePrice))
-                //.ForMember(x => x.TotalPrice, opt => opt.MapFrom(s => s.Total * s.Purchase.PurchaseApplication.Item.Price));
+            //.ForMember(x => x.Price, opt => opt.MapFrom(s => s.Purchase.CurrentPurchasePrice))
+            //.ForMember(x => x.TotalPrice, opt => opt.MapFrom(s => s.Total * s.Purchase.PurchaseApplication.Item.Price));
 
             CreateMap<OutStockHeader, OutStockHeaderViewModel>()
                 .ForMember(x => x.ContractNumber, opt => opt.MapFrom(s => s.RequestHeader.Contract.ContractNumber))
                 .ForMember(x => x.Address, opt => opt.MapFrom(s => s.RequestHeader.Contract.Address))
                 .ForMember(x => x.OutStockNumber, opt => opt.MapFrom(s => s.OutStockHeaderNumber))
-                .ForMember(x => x.OutStockNumber, opt => opt.MapFrom(s => s.OutStockHeaderNumber))
-                .ForMember(x => x.OutStockCategory, opt => opt.MapFrom(s => s.OutStocks.FirstOrDefault().Type))
-                .ForMember(x => x.OutStockViewModels, opt => opt.MapFrom(s => s.OutStocks));
+                .ForMember(x => x.OutStockNumber, opt => opt.MapFrom(s => s.OutStockHeaderNumber));
+                //.ForMember(x => x.OutStockCategory, opt => opt.MapFrom(s => s.OutStocks.FirstOrDefault().Type))
+                //.ForMember(x => x.OutStockViewModels, opt => opt.MapFrom(s => s.OutStocks));
 
             CreateMap<OutStock, OutStockViewModel>()
                 .ForMember(x => x.ProcessStatus, opt => opt.MapFrom(s => s.Status))
-                .ForMember(x => x.Name, opt => opt.MapFrom(s => s.Request.Item.ChineseName))
-                .ForMember(x => x.Code, opt => opt.MapFrom(s => s.Request.Item.Code))
-                .ForMember(x => x.Brand, opt => opt.MapFrom(s => s.Request.Item.Brand))
-                .ForMember(x => x.Model, opt => opt.MapFrom(s => s.Request.Item.Model))
-                .ForMember(x => x.Specification, opt => opt.MapFrom(s => s.Request.Item.Specification))
-                .ForMember(x => x.Dimension, opt => opt.MapFrom(s => s.Request.Item.Dimension))
-                .ForMember(x => x.Unit, opt => opt.MapFrom(s => s.Request.Item.Unit))
-                .ForMember(x => x.Price, opt => opt.MapFrom(s => s.Price != 0 ? s.Price : s.Request.Item.Price))
+                .ForMember(x => x.OutStockNumber, opt => opt.MapFrom(s => s.OutStockNumber))
+                .ForMember(x => x.Type, opt => opt.MapFrom(s => s.Type))
+                //.ForMember(x => x.Name, opt => opt.MapFrom(s => s.Request.Item.ChineseName))
+                //.ForMember(x => x.Code, opt => opt.MapFrom(s => s.Request.Item.Code))
+                //.ForMember(x => x.Brand, opt => opt.MapFrom(s => s.Request.Item.Brand))
+                //.ForMember(x => x.Model, opt => opt.MapFrom(s => s.Request.Item.Model))
+                //.ForMember(x => x.Specification, opt => opt.MapFrom(s => s.Request.Item.Specification))
+                //.ForMember(x => x.Dimension, opt => opt.MapFrom(s => s.Request.Item.Dimension))
+                //.ForMember(x => x.Unit, opt => opt.MapFrom(s => s.Request.Item.Unit))
+                //.ForMember(x => x.Price, opt => opt.MapFrom(s => s.Price != 0 ? s.Price : s.Request.Item.Price))
                 .ForMember(x => x.TotalPrice, opt => opt.MapFrom(s => s.Total * s.Price));
 
             CreateMap<RequestHeader, OutStockHeader>();

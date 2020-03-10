@@ -18,7 +18,7 @@ namespace Core.Repository
 
         public IList<OutStockHeader> GetAllOutStockHeaders()
         {
-            return GetAll().Include(x => x.OutStocks).ToList();
+            return GetAll().ToList();
         }
 
         public int GetLatestSerialNumber(DateTime month)

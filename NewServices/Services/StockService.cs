@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.IO;
@@ -353,14 +354,33 @@ namespace NewServices.Services
             var requestHeaders = _requestHeaderRepository.GetAll().ToList();
             var requests = _requestRepository.GetAll().ToList();
             var listOfOutstockHeader = _outStockHeaderRepository.GetAllOutStockHeaders();
+            var listOfOutStocks = _outStockRepository.GetAll().ToList();
             IList<OutStockHeaderViewModel> listOfOutstockHeaderViewModels = _mapper.Map<OutStockHeaderViewModel[]>(listOfOutstockHeader);
+            IList<OutStockViewModel> listOfOutstockViewModels = _mapper.Map<OutStockViewModel[]>(listOfOutStocks);
+
+            foreach(var item in listOfOutstockViewModels)
+            {
+                var request = requests.FirstOrDefault(x => x.RequestId == item.RequestId);
+                item.Name = request.Item.ChineseName;
+                item.Code = request.Item.Code;
+                item.Brand = request.Item.Brand;
+                item.Model = request.Item.Model;
+                item.Specification = request.Item.Specification;
+                item.Dimension = request.Item.Dimension;
+                item.Unit = request.Item.Unit;
+                item.Price = item.Price != 0 ? item.Price : request.Item.Price;
+            }
+
             foreach (var outStockHeader in listOfOutstockHeaderViewModels)
             {
+                var requestHeader = requestHeaders.FirstOrDefault(x => x.RequestHeaderNumber == outStockHeader.RequestNumber);
+
+                var outStockViewModels = listOfOutstockViewModels.Where(x => x.OutStockNumber == outStockHeader.OutStockNumber);
+
                 if (outStockHeader.OutStockCategory == RequestCategoriesEnum.工具维修 ||
                    outStockHeader.OutStockCategory == RequestCategoriesEnum.工程车维修)
                 {
-                    var requestHeader = requestHeaders.FirstOrDefault(x => x.RequestHeaderNumber == outStockHeader.RequestNumber);
-                    foreach (var outStock in outStockHeader.OutStockViewModels)
+                    foreach (var outStock in outStockViewModels)
                     {
                         var request = requests.FirstOrDefault(x => x.RequestId == outStock.RequestId);
                         if (request?.FixModel != null)
@@ -371,7 +391,12 @@ namespace NewServices.Services
                         outStock.Price = 0;
                     }
                 }
+
+                outStockHeader.OutStockCategory = outStockViewModels.FirstOrDefault().Type;
+                outStockHeader.OutStockViewModels = new BindingList<OutStockViewModel>(outStockViewModels.ToList());
             }
+
+
 
             return listOfOutstockHeaderViewModels;
         }

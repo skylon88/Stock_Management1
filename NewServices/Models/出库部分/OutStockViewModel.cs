@@ -6,6 +6,7 @@ namespace NewServices.Models.出库部分
 {
     public class OutStockViewModel
     {
+        public string OutStockNumber { get; set; }
         [Display(Name = "物品名称")]
         public string Name { get; set; }
         [Display(Name = "物品编码")]
@@ -38,5 +39,7 @@ namespace NewServices.Models.出库部分
         public DateTime UpdateDate { get; set; }
 
         public Guid RequestId { get; set; }
+
+        public RequestCategoriesEnum Type { get; set; }
     }
 }

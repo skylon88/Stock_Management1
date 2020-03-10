@@ -439,7 +439,7 @@ namespace NewServices.Services
                             item.ToDestoryTotal = item.ToDestoryTotal > 0 ? item.ToDestoryTotal : 0;
                             item.AvailableInStorage = GetAvailableInStorage(item, requestViewModels, listOfOutStocks);
                         }
-                        numerator = model.RequestViewModels.Count(x => x.OutStockTotal == x.Total);
+                        numerator = model.RequestViewModels.Count(x => x.OutStockTotal >= x.Total);
                         denominator = model.RequestViewModels.Count();
                         model.CompletePercentage = (decimal)numerator / denominator;
                         break;
