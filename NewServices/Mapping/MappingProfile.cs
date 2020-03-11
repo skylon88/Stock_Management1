@@ -21,15 +21,6 @@ namespace NewServices.Mapping
                 .ForMember(x => x.Code, opt => opt.MapFrom(s => s.Item.Code))
                 .ForMember(x => x.Priority, opt => opt.MapFrom(s => s.Priority.Id))
                 .ForMember(x => x.Max, opt => opt.MapFrom(s => s.Item.Max))
-                //.ForMember(x => x.AvailableInStorage, opt => opt.MapFrom(s => s.Item.Positions.Sum(x=>x.Total) > s.Item.Max ?
-                //                                                 s.Item.Max + "(+" + (s.Item.Positions.Sum(x => x.Total) - s.Item.Max).ToString() + ")" :
-                //                                                 s.Item.Max - s.Item.Positions.Sum(x => x.Total) == 0 ?
-                //                                                 s.Item.Max + "(" + (s.Item.Max - s.Item.Positions.Sum(x => x.Total)).ToString() + ")" :
-                //                                                 s.Item.Max + "(-" + (s.Item.Max - s.Item.Positions.Sum(x => x.Total)).ToString() + ")"
-                //                                                 ))
-                //.ForMember(x => x.ToApplyTotal, opt => opt.MapFrom(s => s.Total - (s.Item.Positions.Sum(x => x.Total) - s.Item.Max) > 0 ?
-                //                                                      s.Total - (s.Item.Positions.Sum(x => x.Total) - s.Item.Max) :
-                //                                                      0))
                 .ForMember(x => x.ToApplyTotal, opt => opt.MapFrom(s => s.Total - s.Item.Positions.Sum(x => x.Total) > 0 ?
                     s.Total - s.Item.Positions.Sum(x => x.Total):
                     0))

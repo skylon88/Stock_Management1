@@ -248,29 +248,37 @@ namespace App
         //采购申请->采购申请汇总
         private void barButtonItem14_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            SplashScreenManager.ShowDefaultWaitForm();
             _purchaseApplicationCtrl.RefreshData(false);
             AddControlToPage(_purchaseApplicationCtrl, TabCategory.采购申请, ApplicationCategoriesEnum.采购申请汇总.ToString());
+            SplashScreenManager.CloseDefaultWaitForm();
         }
 
         //采购申请->退货申请汇总
         private void barButtonItem39_ItemClick(object sender, ItemClickEventArgs e)
         {
+            SplashScreenManager.ShowDefaultWaitForm();
             _refundApplicationCtrl.RefreshData(false);
             AddControlToPage(_refundApplicationCtrl, TabCategory.采购申请, ApplicationCategoriesEnum.退货申请汇总.ToString());
+            SplashScreenManager.CloseDefaultWaitForm();
         }
 
         //采购单->采购单汇总
         private void barButtonItem22_ItemClick(object sender, ItemClickEventArgs e)
         {
+            SplashScreenManager.ShowDefaultWaitForm();
             _purchaseCtrl.RefreshData(false);
             AddControlToPage(_purchaseCtrl, TabCategory.采购单, PurchaseCategoriesEnum.采购单.ToString());
+            SplashScreenManager.CloseDefaultWaitForm();
         }
 
         //采购单->退货单汇总
         private void barButtonItem47_ItemClick(object sender, ItemClickEventArgs e)
         {
+            SplashScreenManager.ShowDefaultWaitForm();
             _refundCtrl.RefreshData(false);
             AddControlToPage(_refundCtrl, TabCategory.采购单, PurchaseCategoriesEnum.退货单.ToString());
+            SplashScreenManager.CloseDefaultWaitForm();
         }
 
         #endregion
@@ -533,8 +541,10 @@ namespace App
         //入库单汇总
         private void barButtonItem24_ItemClick(object sender, ItemClickEventArgs e)
         {
+            SplashScreenManager.ShowDefaultWaitForm();
             _inStockCtrl.RefreshData();
             AddControlToPage(_inStockCtrl, TabCategory.入库, "入库单汇总");
+            SplashScreenManager.CloseDefaultWaitForm();
         }
 
         //生成入库Excel
@@ -561,8 +571,10 @@ namespace App
         //出库单汇总
         private void barButtonItem27_ItemClick(object sender, ItemClickEventArgs e)
         {
+            SplashScreenManager.ShowDefaultWaitForm();
             _inDeliveryCtrl.RefreshData();
             AddControlToPage(_inDeliveryCtrl, TabCategory.出库, "出库单汇总");
+            SplashScreenManager.CloseDefaultWaitForm();
         }
 
         //出库操作
