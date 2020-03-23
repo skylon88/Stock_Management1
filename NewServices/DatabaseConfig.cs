@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
 using Core.Data;
 using Core.Model;
 using NewServices.Services;
@@ -10,11 +11,11 @@ namespace NewServices
         private readonly ManagementService _managementService;
         public DatabaseConfig(ManagementService managementService)
         {
+
             StockContext context = new StockContext();            
             if (context.Database.Exists())
             {                return;
             }
-
 
             context.Database.Create();
             InitData_Generate();

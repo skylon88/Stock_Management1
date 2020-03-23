@@ -7,13 +7,11 @@ namespace Core.Data
   
     public class StockContext : DbContext
     {
-        //"stock_management_2019-08-25T02-00Z"
-        //"Stock_Management"
-        //"Data Source=componentelement-db.database.windows.net;Initial Catalog=stock_management;User ID=reportAdmin;Password=@W19880413;Integrated Security=False;Connect Timeout=600";
-        public StockContext() : base("Data Source=componentelement-db.database.windows.net;Initial Catalog=stock_management_2019-08-25T02-00Z;User ID=reportAdmin;Password=@W19880413;Integrated Security=False;Connect Timeout=600")
+        public StockContext() : base("Local")
         {
             Database.CommandTimeout = 900;
-            Database.SetInitializer(new CreateDatabaseIfNotExists<StockContext>());
+            //Database.SetInitializer(new CreateDatabaseIfNotExists<StockContext>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<StockContext, Migrations.Configuration>());
 
         }
         public DbSet<PoModel> PoModels { get; set; }
@@ -40,18 +38,13 @@ namespace Core.Data
         public DbSet<FixModel> FixModels { get; set; }
 
         public DbSet<Supplier> Suppliers { get; set; }
-    }
 
-    public class MyContextConfiguration : DbMigrationsConfiguration<StockContext> {
-        public MyContextConfiguration()
+        public DbSet<UnitModel> UnitModels { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
-
-            CommandTimeout = 900;
+            base.OnModelCreating(modelBuilder);
         }
+
     }
-
-
-
 }
