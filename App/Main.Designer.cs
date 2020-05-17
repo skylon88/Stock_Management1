@@ -50,6 +50,9 @@
             this.ribbonPageGroup19 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.barButtonItem42 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.ribbonPageGroup22 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
+            this.barButtonItem51 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem52 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem43 = new DevExpress.XtraBars.BarButtonItem();
             this.ribbonPage4 = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonPageGroup4 = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -129,60 +132,60 @@
             // xtraTabControl1
             // 
             this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl1.Location = new System.Drawing.Point(0, 194);
-            this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.xtraTabControl1.Location = new System.Drawing.Point(0, 225);
+            this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.xtraTabControl1.Name = "xtraTabControl1";
-            this.xtraTabControl1.Size = new System.Drawing.Size(2252, 663);
+            this.xtraTabControl1.Size = new System.Drawing.Size(2502, 812);
             this.xtraTabControl1.TabIndex = 0;
             this.xtraTabControl1.CloseButtonClick += new System.EventHandler(this.xtraTabControl_CloseButtonClick);
             // 
             // xtraTabControl2
             // 
             this.xtraTabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl2.Location = new System.Drawing.Point(0, 194);
-            this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.xtraTabControl2.Location = new System.Drawing.Point(0, 225);
+            this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.xtraTabControl2.Name = "xtraTabControl2";
-            this.xtraTabControl2.Size = new System.Drawing.Size(2252, 663);
+            this.xtraTabControl2.Size = new System.Drawing.Size(2502, 812);
             this.xtraTabControl2.TabIndex = 1;
             this.xtraTabControl2.CloseButtonClick += new System.EventHandler(this.xtraTabControl_CloseButtonClick);
             // 
             // xtraTabControl3
             // 
             this.xtraTabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl3.Location = new System.Drawing.Point(0, 194);
-            this.xtraTabControl3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.xtraTabControl3.Location = new System.Drawing.Point(0, 225);
+            this.xtraTabControl3.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.xtraTabControl3.Name = "xtraTabControl3";
-            this.xtraTabControl3.Size = new System.Drawing.Size(2252, 663);
+            this.xtraTabControl3.Size = new System.Drawing.Size(2502, 812);
             this.xtraTabControl3.TabIndex = 2;
             this.xtraTabControl3.CloseButtonClick += new System.EventHandler(this.xtraTabControl_CloseButtonClick);
             // 
             // xtraTabControl4
             // 
             this.xtraTabControl4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl4.Location = new System.Drawing.Point(0, 194);
-            this.xtraTabControl4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.xtraTabControl4.Location = new System.Drawing.Point(0, 225);
+            this.xtraTabControl4.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.xtraTabControl4.Name = "xtraTabControl4";
-            this.xtraTabControl4.Size = new System.Drawing.Size(2252, 663);
+            this.xtraTabControl4.Size = new System.Drawing.Size(2502, 812);
             this.xtraTabControl4.TabIndex = 3;
             this.xtraTabControl4.CloseButtonClick += new System.EventHandler(this.xtraTabControl_CloseButtonClick);
             // 
             // xtraTabControl5
             // 
             this.xtraTabControl5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl5.Location = new System.Drawing.Point(0, 194);
-            this.xtraTabControl5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.xtraTabControl5.Location = new System.Drawing.Point(0, 225);
+            this.xtraTabControl5.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.xtraTabControl5.Name = "xtraTabControl5";
-            this.xtraTabControl5.Size = new System.Drawing.Size(2252, 663);
+            this.xtraTabControl5.Size = new System.Drawing.Size(2502, 812);
             this.xtraTabControl5.TabIndex = 4;
             this.xtraTabControl5.CloseButtonClick += new System.EventHandler(this.xtraTabControl_CloseButtonClick);
             // 
             // xtraTabControl6
             // 
             this.xtraTabControl6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl6.Location = new System.Drawing.Point(0, 194);
-            this.xtraTabControl6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.xtraTabControl6.Location = new System.Drawing.Point(0, 225);
+            this.xtraTabControl6.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.xtraTabControl6.Name = "xtraTabControl6";
-            this.xtraTabControl6.Size = new System.Drawing.Size(2252, 663);
+            this.xtraTabControl6.Size = new System.Drawing.Size(2502, 812);
             this.xtraTabControl6.TabIndex = 5;
             this.xtraTabControl6.CloseButtonClick += new System.EventHandler(this.xtraTabControl_CloseButtonClick);
             // 
@@ -197,7 +200,8 @@
             this.ribbonPageGroup10,
             this.ribbonPageGroup11,
             this.ribbonPageGroup21,
-            this.ribbonPageGroup19});
+            this.ribbonPageGroup19,
+            this.ribbonPageGroup22});
             this.ribbonPage6.Name = "ribbonPage6";
             this.ribbonPage6.Text = "管理";
             // 
@@ -300,6 +304,34 @@
             this.barButtonItem2.Name = "barButtonItem2";
             this.barButtonItem2.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
             this.barButtonItem2.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem2_ItemClick);
+            // 
+            // ribbonPageGroup22
+            // 
+            this.ribbonPageGroup22.ItemLinks.Add(this.barButtonItem51);
+            this.ribbonPageGroup22.ItemLinks.Add(this.barButtonItem52);
+            this.ribbonPageGroup22.Name = "ribbonPageGroup22";
+            this.ribbonPageGroup22.Text = "单位转换";
+            // 
+            // barButtonItem51
+            // 
+            this.barButtonItem51.Caption = "全部列表";
+            this.barButtonItem51.Id = 58;
+            this.barButtonItem51.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem51.ImageOptions.Image")));
+            this.barButtonItem51.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem51.ImageOptions.LargeImage")));
+            this.barButtonItem51.Name = "barButtonItem51";
+            this.barButtonItem51.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barButtonItem51.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem51_ItemClick);
+            // 
+            // barButtonItem52
+            // 
+            this.barButtonItem52.Caption = "添加";
+            this.barButtonItem52.Enabled = false;
+            this.barButtonItem52.Id = 59;
+            this.barButtonItem52.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem52.ImageOptions.Image")));
+            this.barButtonItem52.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem52.ImageOptions.LargeImage")));
+            this.barButtonItem52.Name = "barButtonItem52";
+            this.barButtonItem52.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.Large;
+            this.barButtonItem52.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barButtonItem52_ItemClick);
             // 
             // barButtonItem43
             // 
@@ -852,6 +884,7 @@
             this.ribbonControl.ExpandCollapseItem.Id = 0;
             this.ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.ribbonControl.ExpandCollapseItem,
+            this.ribbonControl.SearchEditItem,
             this.barButtonItem1,
             this.barButtonItem3,
             this.barButtonItem4,
@@ -900,10 +933,12 @@
             this.barButtonItem2,
             this.barButtonItem48,
             this.barButtonItem49,
-            this.barButtonItem50});
+            this.barButtonItem50,
+            this.barButtonItem51,
+            this.barButtonItem52});
             this.ribbonControl.Location = new System.Drawing.Point(0, 0);
-            this.ribbonControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.ribbonControl.MaxItemId = 58;
+            this.ribbonControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.ribbonControl.MaxItemId = 60;
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.PageHeaderItemLinks.Add(this.barButtonItem16);
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
@@ -914,7 +949,7 @@
             this.ribbonPage4,
             this.ribbonPage6});
             this.ribbonControl.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonControlStyle.MacOffice;
-            this.ribbonControl.Size = new System.Drawing.Size(2252, 194);
+            this.ribbonControl.Size = new System.Drawing.Size(2502, 225);
             this.ribbonControl.SelectedPageChanged += new System.EventHandler(this.ribbonControl_SelectedPageChanged);
             // 
             // defaultLookAndFeel1
@@ -930,9 +965,9 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2252, 857);
+            this.ClientSize = new System.Drawing.Size(2502, 1037);
             this.Controls.Add(this.xtraTabControl1);
             this.Controls.Add(this.xtraTabControl2);
             this.Controls.Add(this.xtraTabControl3);
@@ -941,10 +976,10 @@
             this.Controls.Add(this.xtraTabControl6);
             this.Controls.Add(this.ribbonControl);
             this.FormBorderEffect = DevExpress.XtraEditors.FormBorderEffect.Shadow;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.Name = "Main";
             this.Ribbon = this.ribbonControl;
-            this.Text = "物管程序 - COMPONENT ELEMENT CONTRACTING LTD (Version - 1.6.1)";
+            this.Text = "物管程序 - COMPONENT ELEMENT CONTRACTING LTD (Version - 1.7) - 新功能(单位转换)";
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).EndInit();
@@ -1045,6 +1080,9 @@
         public DevExpress.XtraBars.BarButtonItem barButtonItem48;
         private DevExpress.XtraBars.BarButtonItem barButtonItem49;
         private DevExpress.XtraBars.BarButtonItem barButtonItem50;
+        private DevExpress.XtraBars.Ribbon.RibbonPageGroup ribbonPageGroup22;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem51;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem52;
     }
 }
 

@@ -29,6 +29,7 @@ namespace NewServices.Services
         private readonly IPositionRepository _positionRepository;
         private readonly IContractRepository _contractRepository;
         private readonly ISupplierRepository _supplierRepository;
+        private readonly IUnitRepository _unitRepository;
         private readonly IMapper _mapper;
         string _resourceName = "Images.resources";
         public ManagementService(IPoRepository poRepository,
@@ -36,6 +37,7 @@ namespace NewServices.Services
                                  IPositionRepository positionRepository,
                                  IContractRepository contractRepository,
                                  ISupplierRepository supplierRepository,
+                                 IUnitRepository unitRepository,
                                  IMapper mapper)
         {
             _poRepository = poRepository;
@@ -43,6 +45,7 @@ namespace NewServices.Services
             _positionRepository = positionRepository;
             _contractRepository = contractRepository;
             _supplierRepository = supplierRepository;
+            _unitRepository = unitRepository;
             _mapper = mapper;
         }
 
@@ -71,6 +74,30 @@ namespace NewServices.Services
         {
             var query = _supplierRepository.GetAll().ToList();
             return query;
+        }
+
+        public IList<UnitModel> GetUnitModels()
+        {
+            var query = _unitRepository.GetAll().ToList();
+            return query;
+        }
+
+        public void AddUnitModel(UnitModel model)
+        {
+            _unitRepository.Add(model);
+            _unitRepository.Save();
+        }
+
+        public void UpdateUnitModel(UnitModel model)
+        {
+            _unitRepository.Edit(model);
+            _unitRepository.Save();
+        }
+
+        public void DeleteUnitModel(UnitModel model)
+        {
+            _unitRepository.Delete(model);
+            _unitRepository.Save();
         }
 
         public IList<ItemViewModel> GetAllItems()

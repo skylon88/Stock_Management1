@@ -38,6 +38,7 @@ namespace NewServices
             Container.RegisterType<IPoRepository, PoRepository>();
             Container.RegisterType<IContractRepository, ContractRepository>();
             Container.RegisterType<IFixingRepository, FixingRepository>();
+            Container.RegisterType<IUnitRepository, UnitRepository>();
             //Container.RegisterType<IRequestService, RequestService>();
 
             Container.RegisterInstance(config.CreateMapper());

@@ -47,7 +47,8 @@ namespace App
         private readonly RefundCtrl _refundCtrl;
         private readonly InStockCtrl _inStockCtrl;
         private readonly InDeliveryCtrl _inDeliveryCtrl;
-        private SupplierManagementCtrl _supplierManagementCtrl;
+        private readonly SupplierManagementCtrl _supplierManagementCtrl;
+        private readonly UnitManagementCtrl _unitManagementCtrl;
 
         public Main(IRequestService requestService, IPurchaseService purchaseService, IManagementService managementService, IStockService stockService)
         {
@@ -76,6 +77,7 @@ namespace App
             _refundCtrl = DependencyInjector.Retrieve<RefundCtrl>();
             _inStockCtrl = DependencyInjector.Retrieve<InStockCtrl>();
             _inDeliveryCtrl = DependencyInjector.Retrieve<InDeliveryCtrl>();
+            _unitManagementCtrl = DependencyInjector.Retrieve<UnitManagementCtrl>();
 
             this.xtraTabControl1.Text = TabCategory.需求.ToString();
             this.xtraTabControl2.Text = TabCategory.采购申请.ToString();
@@ -1198,6 +1200,15 @@ namespace App
 
         #endregion
 
+        #region 单位转换
+        private void barButtonItem51_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            _unitManagementCtrl.RefreshData();
+            AddControlToPage(_unitManagementCtrl, TabCategory.管理, "单位转换");
+        }
+
+        #endregion
+
         #region General
 
         //选择最上面的Tab
@@ -1346,5 +1357,22 @@ namespace App
 
         #endregion
 
+        private void barButtonItem52_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            XtraInputBoxArgs args = new XtraInputBoxArgs();
+            args.Caption = "请输入单位转换信息";
+            args.Prompt = "供应商名字";
+            args.DefaultButtonIndex = 0;
+            var editor = new TextEdit();
+            args.Editor = editor;
+            var result = XtraInputBox.Show(args);
+
+            if (result != null)
+            {
+                SplashScreenManager.ShowDefaultWaitForm();
+                //_supplierManagementCtrl.CreateNewSuppiler(result.ToString());
+                SplashScreenManager.CloseDefaultWaitForm();
+            }
+        }
     }
 }

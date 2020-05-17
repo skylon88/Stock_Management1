@@ -513,12 +513,16 @@ namespace NewServices.Services
             using (var package = new ExcelPackage(fi))
             {
                 var workbook = package.Workbook;
+                var listOfUnitModel = _managementService.GetUnitModels();
                 foreach (var worksheet in workbook.Worksheets)
                 {
-                    var readData = ReadRequestRecords(worksheet, out var headerObj, out message); //Read Request Records form Excels file
+                    var readData = ReadRequestRecords(listOfUnitModel, worksheet, out var headerObj, out message); //Read Request Records form Excels file
                     if (readData == null || readData.Count == 0)
                     {
-                        message = "需求表内容不能为空";
+                        if (message == string.Empty)
+                        {
+                            message = "需求表内容不能为空";
+                        }
                         return 0;
                     }
                     try
@@ -540,7 +544,7 @@ namespace NewServices.Services
             }
         }
 
-        private IList<Request> ReadRequestRecords(ExcelWorksheet worksheet, out RequestHeader requestHeader, out string errorMessage)
+        private IList<Request> ReadRequestRecords(IList<UnitModel> listOfUnitModels, ExcelWorksheet worksheet, out RequestHeader requestHeader, out string errorMessage)
         {
             var insertHeaderObj = new RequestHeader();
             var listOfRequestRecords = new List<Request>();
@@ -587,14 +591,15 @@ namespace NewServices.Services
                     var contractAddress = worksheet.Cells["D" + row].Value?.ToString().Trim();//合同地址 
                     var itemCode = worksheet.Cells["F" + row].Value?.ToString();//物品编码
                     var totalCount = worksheet.Cells["G" + row].Value?.ToString().Trim();//数量
+                    var unit = worksheet.Cells["H" + row].Value?.ToString().Trim();//Unit
                     var priority = worksheet.Cells["I" + row].Value?.ToString().Trim();//需求级别
                     var reason = worksheet.Cells["J" + row].Value?.ToString().Trim(); //施工材料原因
                     var otherReason = worksheet.Cells["K" + row].Value?.ToString().Trim();//其他需求原因
                     var note = worksheet.Cells["O" + row].Value?.ToString().Trim();
-                    var itemId = GetItemId(itemCode);
+                    var item = GetItemId(itemCode);
 
                     if (string.IsNullOrEmpty(type)) break;
-                    if (itemId == null || itemId == Guid.Empty)
+                    if (item == null || item.ItemId == Guid.Empty)
                     {
                         errorMessage = errorMessage + itemCode + " & ";
                         continue;
@@ -634,18 +639,46 @@ namespace NewServices.Services
                         RequestId = Guid.NewGuid(),
                         RequestNumber = insertHeaderObj.RequestHeaderNumber,
                         SerialNumber = int.TryParse(serialNo, out var serialNumber) ? serialNumber : 0,
-                        ItemId = itemId.Value,
+                        ItemId = item.ItemId,
                         Total = double.TryParse(totalCount, out total) ? total : 0,
                         Reason = Enum.TryParse(reason, out RequestReason requestReason) ? requestReason.ToString() : RequestReason.测量.ToString(),
                         OtherReason = otherReason,
                         Note = note,
                         Status = ProcessStatusEnum.需求建立
                     };
+
+                    //单位转换
+                    if (unit != item.Unit)
+                    {
+                        if (listOfUnitModels.FirstOrDefault(x => x.ItemName == itemCode) != null)
+                        {
+                            var unitConversion = listOfUnitModels.FirstOrDefault(x => x.ItemName == itemCode);
+                            if (unit.Contains(unitConversion.ConvertToUnit))
+                            {
+                                var result = decimal.Round((decimal)(insertObj.Total / unitConversion.Factor), 2, MidpointRounding.AwayFromZero);
+                                insertObj.Total = (double)result;
+                                insertObj.Note += "单位已转换";
+                            }
+                            else
+                            {
+                                errorMessage = errorMessage + itemCode + " 转换单位不存在 & ";
+                                continue;
+                            }
+                        }
+                
+                    }
+
                     SetPriority(insertObj, priority);
                     listOfRequestRecords.Add(insertObj);
 
 
                 }
+
+                if(errorMessage != string.Empty) {
+                    requestHeader = null;
+                    return null;
+                }
+
                 requestHeader = insertHeaderObj;
                 return listOfRequestRecords;
             }
@@ -693,10 +726,10 @@ namespace NewServices.Services
             return result;
         }
 
-        private Guid? GetItemId(string code)
+        private Item GetItemId(string code)
         {
             var result = _itemRepository.FindBy(x => x.Code == code).FirstOrDefault();
-            return result?.ItemId;
+            return result;
         }
 
         private void SetPriority(Request request,string priority)

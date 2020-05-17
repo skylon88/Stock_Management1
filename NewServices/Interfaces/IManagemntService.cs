@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Enum;
+using Core.Model;
 using NewServices.Models.管理;
 
 namespace NewServices.Interfaces
@@ -41,5 +42,12 @@ namespace NewServices.Interfaces
         bool ExportItemExcel(string path, ReportNameEnum reportType, DateTime selectedMonth);
 
         int UpdateTotalNumberBySummarySheet(string filename, out string returnMsg);
+
+        IList<UnitModel> GetUnitModels();
+
+        void AddUnitModel(UnitModel model);
+        void UpdateUnitModel(UnitModel model);
+
+        void DeleteUnitModel(UnitModel model);
     }
 }

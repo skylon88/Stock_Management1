@@ -18,6 +18,7 @@ namespace Core.Migrations
                     Factor = c.Double(),
                     IsGeneral = c.Boolean()
                 }).PrimaryKey(t => t.Id);
+
         }
 
         public override void Down()
