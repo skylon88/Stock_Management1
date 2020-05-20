@@ -7,7 +7,7 @@ namespace Core.Data
   
     public class StockContext : DbContext
     {
-        public StockContext() : base("Staging") //Local
+        public StockContext() : base("Local") //Local
         {
             Database.CommandTimeout = 900;
             //Database.SetInitializer(new CreateDatabaseIfNotExists<StockContext>());

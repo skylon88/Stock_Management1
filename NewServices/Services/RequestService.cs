@@ -648,7 +648,7 @@ namespace NewServices.Services
                     };
 
                     //单位转换
-                    if (unit != item.Unit)
+                    if (!item.Unit.Contains(unit))
                     {
                         if (listOfUnitModels.FirstOrDefault(x => x.ItemName == itemCode) != null)
                         {

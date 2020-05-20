@@ -272,6 +272,13 @@ namespace App.Views.需求部分
                     case ProcessStatusEnum.需求建立:
                         RenderCommonHelper.SetColEditable(e.Column);
                         break;
+                    //根据5月2 号的讨论, 当状态为 采购入库 或 已出库 需要修改需求数量
+                    case ProcessStatusEnum.采购入库:
+                        RenderCommonHelper.SetColEditable(e.Column);
+                        break;
+                    case ProcessStatusEnum.已出库:
+                        RenderCommonHelper.SetColEditable(e.Column);
+                        break;
                     default:
                         RenderCommonHelper.SetColNotEditable(e.Column);
                         break;
